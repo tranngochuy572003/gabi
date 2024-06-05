@@ -3,7 +3,6 @@ package com.gabispa.restfulservice.service.impl;
 import com.gabispa.restfulservice.dto.UserDto;
 import com.gabispa.restfulservice.entity.User;
 import com.gabispa.restfulservice.repository.IUserRepository;
-import com.gabispa.restfulservice.service.IUserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,13 +18,13 @@ import java.util.Optional;
 @Service
 @Data
 @NoArgsConstructor
-public class UserService implements IUserService {
+public class userService implements com.gabispa.restfulservice.service.userService {
     private IUserRepository IUserRepository;
     private static final String pattern = "dd/MM/yyyy";
 
 
     @Autowired
-    public UserService(com.gabispa.restfulservice.repository.IUserRepository IUserRepository) {
+    public userService(com.gabispa.restfulservice.repository.IUserRepository IUserRepository) {
         this.IUserRepository = IUserRepository;
     }
 

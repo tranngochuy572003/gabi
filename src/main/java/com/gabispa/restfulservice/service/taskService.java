@@ -5,7 +5,7 @@ import com.gabispa.restfulservice.entity.Task;
 
 import java.util.List;
 
-public interface ITaskService {
+public interface taskService {
   void addTask(Task task);
   List<Task> getAllTask();
   Task getTaskById(Long id);

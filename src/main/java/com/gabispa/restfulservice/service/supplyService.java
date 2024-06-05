@@ -3,12 +3,11 @@ package com.gabispa.restfulservice.service;
 import com.gabispa.restfulservice.dto.SupplyDto;
 import com.gabispa.restfulservice.entity.Category;
 import com.gabispa.restfulservice.entity.Supply;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 
-public interface ISupplyService {
+public interface supplyService {
   void addSupply(Supply supply);
   List<Supply> getAllSupply();
   Supply getSupplyById(Long id);

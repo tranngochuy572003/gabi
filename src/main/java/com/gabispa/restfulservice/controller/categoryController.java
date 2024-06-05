@@ -2,7 +2,6 @@ package com.gabispa.restfulservice.controller;
 
 import com.gabispa.restfulservice.dto.CategoryDto;
 import com.gabispa.restfulservice.entity.Category;
-import com.gabispa.restfulservice.service.impl.CategoryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +10,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
-public class categoryController {
-  private CategoryService categoryService;
+public class CategoryController {
+  private com.gabispa.restfulservice.service.impl.categoryService categoryService;
 
   @Autowired
-  public categoryController(CategoryService categoryService) {
+  public CategoryController(com.gabispa.restfulservice.service.impl.categoryService categoryService) {
     this.categoryService = categoryService;
   }
 
@@ -26,6 +25,7 @@ public class categoryController {
       return "add category success";
 
     } catch (EntityNotFoundException e) {
+      e.printStackTrace();
       return "error";
     }
   }
@@ -38,6 +38,7 @@ public class categoryController {
       return "update category success";
 
     } catch (EntityNotFoundException e) {
+      e.printStackTrace();
       return "error";
     }
   }

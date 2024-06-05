@@ -2,9 +2,7 @@ package com.gabispa.restfulservice.controller;
 
 import com.gabispa.restfulservice.dto.TaskDto;
 import com.gabispa.restfulservice.entity.Task;
-import com.gabispa.restfulservice.service.impl.TaskService;
 import jakarta.persistence.EntityNotFoundException;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +12,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/task")
 public class TaskController {
-  private final TaskService taskService;
+  private final com.gabispa.restfulservice.service.impl.taskService taskService;
 
   @Autowired
-  public TaskController(TaskService taskService) {
+  public TaskController(com.gabispa.restfulservice.service.impl.taskService taskService) {
     this.taskService = taskService;
   }
 

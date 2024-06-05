@@ -5,7 +5,7 @@ import com.gabispa.restfulservice.entity.Category;
 
 import java.util.List;
 
-public interface ICategoryService {
+public interface categoryService {
   void addCategory(Category category);
   List<Category> getAllCategory();
   Category getCategoryById(Long id);

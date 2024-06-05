@@ -3,12 +3,9 @@ package com.gabispa.restfulservice.service.impl;
 import com.gabispa.restfulservice.dto.CategoryDto;
 import com.gabispa.restfulservice.entity.Category;
 import com.gabispa.restfulservice.repository.ICategoryRepository;
-import com.gabispa.restfulservice.service.ICategoryService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +15,10 @@ import java.util.Optional;
 @Service
 @Data
 @NoArgsConstructor
-public class CategoryService implements ICategoryService {
+public class categoryService implements com.gabispa.restfulservice.service.categoryService {
   private ICategoryRepository iCategoryRepository;
   @Autowired
-  public CategoryService(ICategoryRepository CategoryRepository) {
+  public categoryService(ICategoryRepository CategoryRepository) {
     this.iCategoryRepository= CategoryRepository;
   }
   @Override

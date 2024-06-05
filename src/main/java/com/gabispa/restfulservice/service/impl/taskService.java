@@ -3,7 +3,6 @@ package com.gabispa.restfulservice.service.impl;
 import com.gabispa.restfulservice.dto.TaskDto;
 import com.gabispa.restfulservice.entity.Task;
 import com.gabispa.restfulservice.repository.ITaskRepository;
-import com.gabispa.restfulservice.service.ITaskService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,12 @@ import java.util.Optional;
 @Data
 @NoArgsConstructor
 
-public class TaskService implements ITaskService {
+public class taskService implements com.gabispa.restfulservice.service.taskService {
 
     private ITaskRepository iTaskRepository;
 
     @Autowired
-    public TaskService(ITaskRepository taskRepository) {
+    public taskService(ITaskRepository taskRepository) {
         this.iTaskRepository = taskRepository;
     }
 

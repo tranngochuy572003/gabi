@@ -3,7 +3,6 @@ package com.gabispa.restfulservice.controller;
 import com.gabispa.restfulservice.dto.UserDto;
 import com.gabispa.restfulservice.dto.UserDtoLogin;
 import com.gabispa.restfulservice.entity.User;
-import com.gabispa.restfulservice.service.impl.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ import java.util.logging.Logger;
 @RequestMapping("/user")
 public class UserController {
   @Autowired
-  private UserService userService;
+  private com.gabispa.restfulservice.service.impl.userService userService;
   private JSONObject payload = new JSONObject();
   private static final String JWT_HEADER = "{\"alg\":\"HS256\",\"typ\":\"JWT\"}";
   // "alg" : "H256"

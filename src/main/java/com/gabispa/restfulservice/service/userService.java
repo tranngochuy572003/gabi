@@ -5,7 +5,7 @@ import com.gabispa.restfulservice.entity.User;
 
 import java.util.List;
 
-public interface IUserService {
+public interface userService {
   void createUser(User user);
   List<User> getAllUsers();
   User getUserById(Long id);

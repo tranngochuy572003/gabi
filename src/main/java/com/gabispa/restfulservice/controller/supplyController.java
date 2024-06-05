@@ -2,7 +2,6 @@ package com.gabispa.restfulservice.controller;
 
 import com.gabispa.restfulservice.dto.SupplyDto;
 import com.gabispa.restfulservice.entity.Supply;
-import com.gabispa.restfulservice.service.impl.SupplyService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +11,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/supply")
-public class supplyController {
+public class SupplyController {
   @Autowired
-  private SupplyService supplyService;
+  private com.gabispa.restfulservice.service.impl.supplyService supplyService;
 
   @PostMapping("/add")
   public String addSupply(@RequestBody Supply supply) {
@@ -23,8 +22,11 @@ public class supplyController {
       return "Add supply success";
 
     } catch (EntityNotFoundException e) {
+      e.printStackTrace();
       return "error";
     }
+
+
   }
 
   @GetMapping
@@ -34,6 +36,7 @@ public class supplyController {
       return supplyService.getAllSupply();
 
     } catch (EntityNotFoundException e) {
+      e.printStackTrace();
       return null;
     }
 
@@ -46,6 +49,7 @@ public class supplyController {
       return supplyService.getSupplyById(id);
 
     } catch (EntityNotFoundException e) {
+      e.printStackTrace();
       return null;
     }
 
@@ -60,6 +64,7 @@ public class supplyController {
       supplyService.updateSupply(id, supplyDto);
       return ResponseEntity.noContent().build();
     } catch (EntityNotFoundException e) {
+      e.printStackTrace();
       return null;
     }
 

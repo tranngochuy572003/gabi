@@ -4,12 +4,9 @@ import com.gabispa.restfulservice.dto.SupplyDto;
 import com.gabispa.restfulservice.entity.Category;
 import com.gabispa.restfulservice.entity.Supply;
 import com.gabispa.restfulservice.repository.ISupplyRepository;
-import com.gabispa.restfulservice.service.ISupplyService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,10 +17,10 @@ import java.util.Optional;
 @Service
 @Data
 @NoArgsConstructor
-public class SupplyService implements ISupplyService {
+public class supplyService implements com.gabispa.restfulservice.service.supplyService {
   private ISupplyRepository ISupplyRepository;
 
-  public SupplyService(com.gabispa.restfulservice.repository.ISupplyRepository ISupplyRepository, com.gabispa.restfulservice.service.ISupplyService ISupplyService) {
+  public supplyService(com.gabispa.restfulservice.repository.ISupplyRepository ISupplyRepository, com.gabispa.restfulservice.service.supplyService ISupplyService) {
     this.ISupplyRepository = ISupplyRepository;
   }
   @Override
