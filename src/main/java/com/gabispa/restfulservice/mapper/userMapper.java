@@ -1,6 +1,6 @@
 package com.gabispa.restfulservice.mapper;
 
-import com.gabispa.restfulservice.dto.userDto;
+import com.gabispa.restfulservice.dto.UserDto;
 import com.gabispa.restfulservice.entity.User;
 
 import java.text.ParseException;
@@ -11,8 +11,8 @@ import java.util.Date;
 public class userMapper {
   private static final String PATTERN = "dd/MM/yyyy";
 
-  public static userDto toDto(User user) {
-    userDto userDto = new userDto();
+  public static UserDto toDto(User user) {
+    UserDto userDto = new UserDto();
     userDto.setAge(user.getAge());
     userDto.setEmail(user.getEmail());
     userDto.setNote(user.getNote());
@@ -34,7 +34,7 @@ public class userMapper {
     return userDto;
   }
 
-  public static User toEntity(userDto userDto) {
+  public static User toEntity(UserDto userDto) {
     User user = new User();
     user.setAge(userDto.getAge());
     user.setEmail(userDto.getEmail());

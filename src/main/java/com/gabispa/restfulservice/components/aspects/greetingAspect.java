@@ -18,7 +18,7 @@ public class greetingAspect {
   @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
   public void controllerMethods(){}
 
-  @Around("controllerMethods() && execution(* com.gabispa.restfulservice.controller.userController.*(..))")
+  @Around("controllerMethods() && execution(* com.gabispa.restfulservice.controller.UserController.*(..))")
   public Object logUserActivity (ProceedingJoinPoint joinPoint) throws Throwable{
 
     String methodName = joinPoint.getSignature().getName();

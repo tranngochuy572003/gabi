@@ -1,13 +1,11 @@
 package com.gabispa.restfulservice.service.impl;
 
-import com.gabispa.restfulservice.dto.taskDto;
+import com.gabispa.restfulservice.dto.TaskDto;
 import com.gabispa.restfulservice.entity.Task;
-import com.gabispa.restfulservice.exception.idNotFound;
-import com.gabispa.restfulservice.exception.invalidFieldException;
-import com.gabispa.restfulservice.exception.listNullException;
+import com.gabispa.restfulservice.exception.BadRequestException;
+
 import com.gabispa.restfulservice.mapper.taskMapper;
 import com.gabispa.restfulservice.repository.taskRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,18 +29,14 @@ public class taskService implements com.gabispa.restfulservice.service.taskServi
   @Override
   public void addTask(Task task) {
     if (task.getName().isEmpty()) {
-      throw new invalidFieldException("supplyName isn't empty");
+      throw new BadRequestException("SupplyName isn't empty");
     }
     taskRepository.save(task);
   }
 
   @Override
   public List<Task> getAllTask() {
-    List<Task> taskList = taskRepository.findAll();
-    if (taskList.isEmpty()) {
-      throw new listNullException("List task is empty");
-    }
-    return taskList;
+    return taskRepository.findAll();
   }
 
   @Override
@@ -51,12 +45,12 @@ public class taskService implements com.gabispa.restfulservice.service.taskServi
     if (taskOptional.isPresent()) {
       return taskOptional.get();
     } else {
-      throw new idNotFound("taskId is invalid");
+      throw new BadRequestException("TaskId is invalid");
     }
   }
 
   @Override
-  public void updateTask(Long id, taskDto taskDto) {
+  public void updateTask(Long id, TaskDto taskDto) {
     Optional<Task> taskOptional = taskRepository.findById(id);
     if (taskOptional.isPresent()) {
       Task task = taskOptional.get();
@@ -64,7 +58,7 @@ public class taskService implements com.gabispa.restfulservice.service.taskServi
       taskRepository.save(task);
 
     } else {
-      throw new idNotFound("Task not found with id: " + id);
+      throw new BadRequestException("Task not found with id: " + id);
     }
   }
 
@@ -74,7 +68,7 @@ public class taskService implements com.gabispa.restfulservice.service.taskServi
     if (taskOptional.isPresent()) {
       taskRepository.deleteById(id);
     } else {
-      throw new idNotFound("Task not found with id: " + id);
+      throw new BadRequestException("Task not found with id: " + id);
     }
 
   }

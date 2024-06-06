@@ -5,7 +5,7 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
-public class userDto {
+public class UserDto {
  private String state ;
 
  private String accountName;

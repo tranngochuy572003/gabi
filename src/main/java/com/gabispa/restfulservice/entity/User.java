@@ -11,7 +11,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Table(name = "user")
-public class User extends baseEntity {
+@NamedQuery(name = "User.findByEmailAddress",
+        query = "select u from User u where u.email = ?1")
+
+public class User extends BaseEntity {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   private List<Book> bookings;

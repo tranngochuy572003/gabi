@@ -1,9 +1,9 @@
 package com.gabispa.restfulservice.controller;
 
-import com.gabispa.restfulservice.dto.userDto;
-import com.gabispa.restfulservice.dto.userDtoLogin;
+import com.gabispa.restfulservice.dto.UserDto;
+import com.gabispa.restfulservice.dto.UserDtoFilter;
+import com.gabispa.restfulservice.dto.UserDtoLogin;
 import com.gabispa.restfulservice.entity.User;
-import jakarta.persistence.EntityNotFoundException;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/user")
-public class userController {
+public class UserController {
   @Autowired
   private com.gabispa.restfulservice.service.impl.userService userService;
   private JSONObject payload = new JSONObject();
@@ -45,14 +45,14 @@ public class userController {
 
       return encode(signedBytes);
     } catch (NoSuchAlgorithmException | InvalidKeyException ex) {
-      Logger.getLogger(userController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
+      Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, ex.getMessage(), ex);
       return null;
     }
   }
 
 
   @PostMapping("/login")
-  public ResponseEntity<?> userLogin(@RequestBody userDtoLogin userDtoLogin) {
+  public ResponseEntity<?> userLogin(@RequestBody UserDtoLogin userDtoLogin) {
     try {
       User user = userService.findUserByEmailAndPassWord(userDtoLogin.getEmail(), userDtoLogin.getPassword());
       LocalDateTime ldt = LocalDateTime.now().plusHours(1);
@@ -92,13 +92,13 @@ public class userController {
   }
 
   @PatchMapping("/updateState/{id}")
-  public ResponseEntity<String> updateStateUser(@PathVariable Long id, @RequestBody userDto userDto) {
+  public ResponseEntity<String> updateStateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
       userService.updateStateUser(id, userDto);
       return new ResponseEntity<>("User state updated successfully", HttpStatus.OK);
   }
 
   @PatchMapping("/update/{id}")
-  public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody userDto userDto) {
+  public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
       userService.updateUser(id, userDto);
       return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
   }
@@ -109,5 +109,10 @@ public class userController {
       return new ResponseEntity<>(message, HttpStatus.OK);
   }
 
+  @GetMapping("/getUserByStateAndAccountName")
+  public ResponseEntity<List<User>> getUserByStateAndAdress(@RequestBody UserDtoFilter user) {
+    List<User> userList = userService.getUserSer(user.getAccountName(),user.getState());
+    return new ResponseEntity<>(userList, HttpStatus.OK);
+  }
 
 }

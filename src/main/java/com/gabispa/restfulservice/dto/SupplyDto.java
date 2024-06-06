@@ -4,7 +4,7 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
-public class supplyDto {
+public class SupplyDto {
   private String nameService ;
   private Long priceService ;
   private String description ;

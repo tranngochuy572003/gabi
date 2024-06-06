@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class baseEntity {
+public abstract class BaseEntity {
 
   @Id
   @Column(name ="id" , insertable = false, updatable = false)

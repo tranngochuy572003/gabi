@@ -1,11 +1,11 @@
 package com.gabispa.restfulservice.mapper;
 
-import com.gabispa.restfulservice.dto.taskDto;
+import com.gabispa.restfulservice.dto.TaskDto;
 import com.gabispa.restfulservice.entity.Task;
 
 public class taskMapper {
-  public static taskDto toDto(Task task) {
-    taskDto taskDto = new taskDto();
+  public static TaskDto toDto(Task task) {
+    TaskDto taskDto = new TaskDto();
     taskDto.setDescription(task.getDescription());
     taskDto.setTimeWork(task.getTimeWork());
     taskDto.setState(task.getState());
@@ -15,7 +15,7 @@ public class taskMapper {
 
   }
 
-  public static Task toEntity(taskDto taskDto) {
+  public static Task toEntity(TaskDto taskDto) {
     Task task = new Task();
     task.setDescription(taskDto.getDescription());
     task.setTimeWork(taskDto.getTimeWork());

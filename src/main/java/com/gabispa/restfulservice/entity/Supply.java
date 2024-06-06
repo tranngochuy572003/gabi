@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "supply")
-public class Supply extends baseEntity {
+public class Supply extends BaseEntity {
 
     @OneToMany(mappedBy = "supply", cascade = CascadeType.ALL)
     private List<Book> bookings ;

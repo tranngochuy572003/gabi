@@ -1,6 +1,6 @@
 package com.gabispa.restfulservice.controller;
 
-import com.gabispa.restfulservice.dto.taskDto;
+import com.gabispa.restfulservice.dto.TaskDto;
 import com.gabispa.restfulservice.entity.Task;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/task")
-public class taskController {
+public class TaskController {
   private final com.gabispa.restfulservice.service.impl.taskService taskService;
 
   @Autowired
-  public taskController(com.gabispa.restfulservice.service.impl.taskService taskService) {
+  public TaskController(com.gabispa.restfulservice.service.impl.taskService taskService) {
     this.taskService = taskService;
   }
 
@@ -34,7 +34,7 @@ public class taskController {
 
 
   @PatchMapping("/update/{id}")
-  public String update(@PathVariable Long id, @RequestBody taskDto taskDto) {
+  public String update(@PathVariable Long id, @RequestBody TaskDto taskDto) {
     try {
       taskService.updateTask(id, taskDto);
       return "update task success";

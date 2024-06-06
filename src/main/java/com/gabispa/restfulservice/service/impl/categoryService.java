@@ -1,9 +1,9 @@
 package com.gabispa.restfulservice.service.impl;
 
-import com.gabispa.restfulservice.dto.categoryDto;
+import com.gabispa.restfulservice.dto.CategoryDto;
 import com.gabispa.restfulservice.entity.Category;
-import com.gabispa.restfulservice.exception.idNotFound;
-import com.gabispa.restfulservice.exception.invalidFieldException;
+import com.gabispa.restfulservice.exception.BadRequestException;
+
 import com.gabispa.restfulservice.mapper.categoryMapper;
 import com.gabispa.restfulservice.repository.categoryRepository;
 import lombok.Data;
@@ -28,7 +28,7 @@ public class categoryService implements com.gabispa.restfulservice.service.categ
   public void addCategory(Category category) {
     if(category.getName().isEmpty())
     {
-      throw new invalidFieldException("Name of category is not null");
+      throw new BadRequestException("Name of category is not null");
     }
     categoryRepository.save(category);
   }
@@ -43,17 +43,17 @@ public class categoryService implements com.gabispa.restfulservice.service.categ
       return optionalCategory.get();
     }
     else{
-      throw new idNotFound("Id isn't  exist");
+      throw new BadRequestException("Id is invalid");
     }
   }
   @Override
-  public void updateCategory(Long id, categoryDto categoryDto) {
+  public void updateCategory(Long id, CategoryDto categoryDto) {
     Optional<Category> optionalCategory = categoryRepository.findById(id);
     if(optionalCategory.isPresent()){
       Category category = optionalCategory.get();
       category= categoryMapper.toEntity(categoryDto);
     }else{
-      throw new idNotFound("Not found category with id "+ id);
+      throw new BadRequestException("Not found category with id "+ id);
     }
 
   }
@@ -64,7 +64,7 @@ public class categoryService implements com.gabispa.restfulservice.service.categ
       categoryRepository.deleteById(id);
     }
     else {
-      throw new idNotFound("Id isn't exist");
+      throw new BadRequestException("Id is invalid");
     }
   }
 }

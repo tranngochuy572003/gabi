@@ -4,8 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.FORBIDDEN)
-public class accountNotFound extends RuntimeException{
-  public accountNotFound(String message) {
-    super("Account not found");
+
+public class ForbiddenException extends BaseException{
+  public ForbiddenException(String message) {
+    super(message);
   }
 }

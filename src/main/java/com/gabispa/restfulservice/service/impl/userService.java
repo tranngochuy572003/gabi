@@ -1,24 +1,17 @@
 package com.gabispa.restfulservice.service.impl;
 
-import com.gabispa.restfulservice.dto.userDto;
+import com.gabispa.restfulservice.dto.UserDto;
 import com.gabispa.restfulservice.entity.User;
-import com.gabispa.restfulservice.exception.accountNotFound;
-import com.gabispa.restfulservice.exception.idNotFound;
-import com.gabispa.restfulservice.exception.invalidFieldException;
-import com.gabispa.restfulservice.exception.listNullException;
+import com.gabispa.restfulservice.exception.BadRequestException;
+
 import com.gabispa.restfulservice.mapper.userMapper;
 import com.gabispa.restfulservice.repository.userRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.junit.platform.commons.logging.Logger;
-import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,9 +29,9 @@ public class userService implements com.gabispa.restfulservice.service.userServi
   }
 
   @Override
-  public void addUser(User user) throws invalidFieldException {
+  public void addUser(User user) throws BadRequestException {
     if (user.getPassword().isEmpty() || user.getEmail().isEmpty() || user.getAccountName().isEmpty()) {
-      throw new invalidFieldException("Field required is not blank.");
+      throw new BadRequestException("Field required is not blank.");
     }
     //hash Password
     user.setPassword(user.getPassword());
@@ -47,26 +40,19 @@ public class userService implements com.gabispa.restfulservice.service.userServi
 
   @Override
   public List<User> getAllUsers() {
-    List<User> userList = userRepository.findAll();
-    if (userList.isEmpty()) {
-      throw new listNullException("List empty");
-    }
-    return userList;
+    return userRepository.findAll();
   }
 
   @Override
   public User getUserById(Long id) {
 
-    try {
-      Optional<User> users = userRepository.findById(id);
-      if (users.isPresent()) {
-        return users.get();
+      Optional<User> user = userRepository.findById(id);
+      if (user.isPresent()) {
+        return user.get();
       } else {
-        throw new listNullException("List User is null");
+        throw new BadRequestException("Email or Password is invalid");
       }
-    } catch (Exception e) {
-      throw new idNotFound("Id isn't exist");
-    }
+
 
   }
 
@@ -78,25 +64,25 @@ public class userService implements com.gabispa.restfulservice.service.userServi
       userRepository.deleteById(userId);
       return "Delete user success";
     } else {
-      throw new idNotFound("Id isn't exist");
+      throw new BadRequestException("Id is invalid");
     }
   }
 
   @Override
-  public void updateStateUser(Long id, userDto userDto) {
+  public void updateStateUser(Long id, UserDto userDto) {
     Optional<User> optionalUser = userRepository.findById(id);
     if (optionalUser.isPresent()) {
       User user = optionalUser.get();
       user.setState(userDto.getState());
       userRepository.save(user);
     } else {
-      throw new EntityNotFoundException("User not found with id: " + id);
+      throw new BadRequestException("Id is invalid " + id);
     }
   }
 
 
   @Override
-  public String updateUser(Long id, userDto userDto) {
+  public String updateUser(Long id, UserDto userDto) {
 
     Optional<User> optionalUser = userRepository.findById(id);
     if (optionalUser.isPresent()) {
@@ -105,28 +91,29 @@ public class userService implements com.gabispa.restfulservice.service.userServi
       userRepository.save(user);
       return "Update user success";
     } else {
-      throw new idNotFound("User not found");
+      throw new BadRequestException("Id is invalid");
     }
   }
 
   @Override
-  public User findUserByEmailAndPassWord(String email, String password) throws EntityNotFoundException {
-    List<User> userList = userRepository.findAll();
-    User User = new User();
-    if (userList.isEmpty()) {
-      throw new listNullException("userList return null");
+  public User findUserByEmailAndPassWord(String email, String password) throws BadRequestException {
 
+    User user = userRepository.findUserByEmailAndPassWord(email,password);
+
+    if(user==null){
+        throw new BadRequestException("Email or Password is invalid");
     }
-    for (User user : userList) {
-      if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-        return user;
-      }
-      else {
-        throw new accountNotFound("UserName or PassWord isn't not valid");
-      }
-    }
-    return User;
+    return user;
   }
+
+  public List<User> getUserSer(String accountName,String state){
+    List<User> userList =  userRepository.getUser(accountName,state);
+    if(userList.size()==0){
+      throw new BadRequestException("AccountName or State is invalid");
+    }
+    return userList;
+  }
+
 }
 
 
