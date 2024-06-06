@@ -1,9 +1,10 @@
 package com.gabispa.restfulservice.controller;
 
-import com.gabispa.restfulservice.dto.TaskDto;
+import com.gabispa.restfulservice.dto.taskDto;
 import com.gabispa.restfulservice.entity.Task;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/task")
-public class TaskController {
+public class taskController {
   private final com.gabispa.restfulservice.service.impl.taskService taskService;
 
   @Autowired
-  public TaskController(com.gabispa.restfulservice.service.impl.taskService taskService) {
+  public taskController(com.gabispa.restfulservice.service.impl.taskService taskService) {
     this.taskService = taskService;
   }
 
@@ -33,7 +34,7 @@ public class TaskController {
 
 
   @PatchMapping("/update/{id}")
-  public String update(@PathVariable Long id, @RequestBody TaskDto taskDto) {
+  public String update(@PathVariable Long id, @RequestBody taskDto taskDto) {
     try {
       taskService.updateTask(id, taskDto);
       return "update task success";
@@ -70,7 +71,7 @@ public class TaskController {
 
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<String> delete(@PathVariable Long id) {
-   String message =  taskService.deleteTask(id);
-    return ResponseEntity.ok(message);
+   taskService.deleteTask(id);
+    return new ResponseEntity<>("Delete task success", HttpStatus.OK);
   }
 }

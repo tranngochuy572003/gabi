@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "booking")
-public class Book extends BaseEntity {
+public class Book extends baseEntity {
 
   @ManyToOne
   @JoinColumn(name = "user_id")

@@ -1,9 +1,11 @@
 package com.gabispa.restfulservice.service.impl;
 
-import com.gabispa.restfulservice.dto.CategoryDto;
+import com.gabispa.restfulservice.dto.categoryDto;
 import com.gabispa.restfulservice.entity.Category;
-import com.gabispa.restfulservice.repository.ICategoryRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.gabispa.restfulservice.exception.idNotFound;
+import com.gabispa.restfulservice.exception.invalidFieldException;
+import com.gabispa.restfulservice.mapper.categoryMapper;
+import com.gabispa.restfulservice.repository.categoryRepository;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,45 +18,53 @@ import java.util.Optional;
 @Data
 @NoArgsConstructor
 public class categoryService implements com.gabispa.restfulservice.service.categoryService {
-  private ICategoryRepository iCategoryRepository;
+  private categoryRepository categoryRepository;
   @Autowired
-  public categoryService(ICategoryRepository CategoryRepository) {
-    this.iCategoryRepository= CategoryRepository;
+  public categoryService(categoryRepository categoryRepository) {
+
+    this.categoryRepository = categoryRepository;
   }
   @Override
   public void addCategory(Category category) {
-    iCategoryRepository.save(category);
+    if(category.getName().isEmpty())
+    {
+      throw new invalidFieldException("Name of category is not null");
+    }
+    categoryRepository.save(category);
   }
   @Override
   public List<Category> getAllCategory() {
-    return iCategoryRepository.findAll();
+    return categoryRepository.findAll();
   }
   @Override
   public Category getCategoryById(Long id) {
-    Optional<Category> optionalCategory = iCategoryRepository.findById(id);
-    return optionalCategory.orElse(null);
+    Optional<Category> optionalCategory = categoryRepository.findById(id);
+    if(optionalCategory.isPresent()){
+      return optionalCategory.get();
+    }
+    else{
+      throw new idNotFound("Id isn't  exist");
+    }
   }
   @Override
-  public void updateCategory(Long id, CategoryDto categoryDto) {
-    Optional<Category> optionalCategory = iCategoryRepository.findById(id);
+  public void updateCategory(Long id, categoryDto categoryDto) {
+    Optional<Category> optionalCategory = categoryRepository.findById(id);
     if(optionalCategory.isPresent()){
       Category category = optionalCategory.get();
-      category.setState(categoryDto.getState());
-      category.setDescription(categoryDto.getDescription());
-      category.setName(categoryDto.getName());
+      category= categoryMapper.toEntity(categoryDto);
     }else{
-      throw new EntityNotFoundException("Not found category with id "+ id);
+      throw new idNotFound("Not found category with id "+ id);
     }
 
   }
   @Override
-  public String deleteCategory(Long id) {
-    try {
-      iCategoryRepository.deleteById(id);
-      return "delete category success";
-
-    }catch (EntityNotFoundException e){
-      return "categoryId invalid";
+  public void deleteCategory(Long id) {
+    Optional<Category> category = categoryRepository.findById(id);
+    if(category.isPresent()){
+      categoryRepository.deleteById(id);
+    }
+    else {
+      throw new idNotFound("Id isn't exist");
     }
   }
 }

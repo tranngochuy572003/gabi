@@ -1,83 +1,60 @@
 package com.gabispa.restfulservice.controller;
 
-import com.gabispa.restfulservice.dto.CategoryDto;
+import com.gabispa.restfulservice.dto.categoryDto;
 import com.gabispa.restfulservice.entity.Category;
+import com.gabispa.restfulservice.exception.listNullException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/category")
-public class CategoryController {
+public class categoryController {
   private com.gabispa.restfulservice.service.impl.categoryService categoryService;
 
   @Autowired
-  public CategoryController(com.gabispa.restfulservice.service.impl.categoryService categoryService) {
+  public categoryController(com.gabispa.restfulservice.service.impl.categoryService categoryService) {
     this.categoryService = categoryService;
   }
 
   @PostMapping("/add")
-  public String add(@RequestBody Category category) {
-    try {
-      categoryService.addCategory(category);
-      return "add category success";
-
-    } catch (EntityNotFoundException e) {
-      e.printStackTrace();
-      return "error";
-    }
+  public ResponseEntity<?> add(@RequestBody Category category) {
+    categoryService.addCategory(category);
+    return new ResponseEntity<>("Add category success", HttpStatus.OK);
   }
 
 
   @PatchMapping("/update/{id}")
-  public String update(@PathVariable Long id, @RequestBody CategoryDto categoryDto) {
-    try {
-      categoryService.updateCategory(id, categoryDto);
-      return "update category success";
-
-    } catch (EntityNotFoundException e) {
-      e.printStackTrace();
-      return "error";
-    }
+  public ResponseEntity<?> update(@PathVariable Long id, @RequestBody categoryDto categoryDto) {
+    categoryService.updateCategory(id, categoryDto);
+    return new ResponseEntity<>("Update category success", HttpStatus.OK);
   }
 
   @GetMapping()
-  public List<Category> categoryList() {
-    try {
-      return categoryService.getAllCategory();
-
-
-    } catch (EntityNotFoundException e) {
-      e.printStackTrace();
-      return null;
+  public ResponseEntity<List<Category>> categoryList() {
+    List<Category> categoryList=categoryService.getAllCategory();
+    if(categoryList.isEmpty()){
+      throw new listNullException("CategoryList return null");
+    }
+    else {
+      return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
   }
 
   @GetMapping("get/{id}")
-  public Category category(@PathVariable Long id) {
-    try {
-      return categoryService.getCategoryById(id);
-
-    } catch (EntityNotFoundException e) {
-      e.printStackTrace();
-      return null;
-    }
+  public ResponseEntity<Category> category(@PathVariable Long id) {
+     Category category= categoryService.getCategoryById(id);
+     return new ResponseEntity<>(category, HttpStatus.OK);
   }
 
   @DeleteMapping("/delete/{id}")
-  public String delete(@PathVariable Long id) {
-    try {
+  public  ResponseEntity<String> delete(@PathVariable Long id) {
       categoryService.deleteCategory(id);
-      return "delete category success";
-
-    } catch (EntityNotFoundException e) {
-      e.printStackTrace();
-      return "error";
-    }
-
-
+      return new ResponseEntity<>("Delete category success", HttpStatus.OK);
   }
 
 }

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Table(name = "task")
 
-public class Task extends BaseEntity{
+public class Task extends baseEntity {
 
   @OneToOne(mappedBy = "task",cascade = CascadeType.ALL)
   private Supply supply;

@@ -1,9 +1,13 @@
 package com.gabispa.restfulservice.service.impl;
 
-import com.gabispa.restfulservice.dto.SupplyDto;
+import com.gabispa.restfulservice.dto.supplyDto;
 import com.gabispa.restfulservice.entity.Category;
 import com.gabispa.restfulservice.entity.Supply;
-import com.gabispa.restfulservice.repository.ISupplyRepository;
+import com.gabispa.restfulservice.exception.idNotFound;
+import com.gabispa.restfulservice.exception.invalidFieldException;
+import com.gabispa.restfulservice.exception.listNullException;
+import com.gabispa.restfulservice.mapper.supplyMapper;
+import com.gabispa.restfulservice.repository.supplyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,69 +22,72 @@ import java.util.Optional;
 @Data
 @NoArgsConstructor
 public class supplyService implements com.gabispa.restfulservice.service.supplyService {
-  private ISupplyRepository ISupplyRepository;
+  private supplyRepository supplyRepository;
 
-  public supplyService(com.gabispa.restfulservice.repository.ISupplyRepository ISupplyRepository, com.gabispa.restfulservice.service.supplyService ISupplyService) {
-    this.ISupplyRepository = ISupplyRepository;
+  public supplyService(supplyRepository supplyRepository, com.gabispa.restfulservice.service.supplyService ISupplyService) {
+    this.supplyRepository = supplyRepository;
   }
   @Override
   public void addSupply(Supply supply) {
-    ISupplyRepository.save(supply);
+    if(supply.getNameService().isEmpty()){
+      throw new invalidFieldException("nameField is required");
+    }
+    supplyRepository.save(supply);
   }
   @Override
   public List<Supply> getAllSupply() {
-    return ISupplyRepository.findAll();
+    List<Supply> supplyList = supplyRepository.findAll();
+    if(supplyList.isEmpty()){
+      throw new listNullException("List supply return null");
+    }
+    return supplyList;
   }
   @Override
   public Supply getSupplyById(Long id) {
-    Optional<Supply> optionalSupply  = ISupplyRepository.findById(id);
-    return optionalSupply.orElse(null);
-  }
-  @Override
-  public void updateSupply(Long id, SupplyDto supplyDto) {
-    Optional<Supply> optionalSupply = ISupplyRepository.findById(id);
+    Optional<Supply> optionalSupply  = supplyRepository.findById(id);
     if(optionalSupply.isPresent()){
-      Supply supply = optionalSupply.get();
-      supply.setNameService(supplyDto.getNameService());
-      supply.setPriceService(supplyDto.getPriceService());
-      supply.setDescription(supplyDto.getDescription());
-      supply.setImage(supplyDto.getImage());
-      supply.setRate(supplyDto.getState());
-      ISupplyRepository.save(supply);
+      return optionalSupply.get();
     }
     else {
-      throw new EntityNotFoundException("Supply not found with id: " + id);
+      throw new idNotFound("supplyId isn't not found");
     }
 
   }
   @Override
-  public String deleteSupply(Long id) {
-    try {
-      ISupplyRepository.deleteById(id);
-      return "delete supply success";
-
-    }catch (EntityNotFoundException e){
-
-        return "supplyId not found";
+  public void updateSupply(Long id, supplyDto supplyDto) {
+    Optional<Supply> optionalSupply = supplyRepository.findById(id);
+    if(optionalSupply.isPresent()){
+      Supply supply = optionalSupply.get();
+      supply = supplyMapper.toEntity(supplyDto);
+      supplyRepository.save(supply);
     }
+    else {
+      throw new idNotFound("Supply not found with id: " + id);
+    }
+
+  }
+  @Override
+  public void deleteSupply(Long id) {
+    Optional<Supply> optionalSupply = supplyRepository.findById(id);
+    if(optionalSupply.isPresent()){
+      supplyRepository.deleteById(id);
+    }
+    else{
+      throw new idNotFound("supplyId isn't exist");
+    }
+
   }
 
   @Override
   public HashMap<String,List<Category>> getSupplyByCategory() {
     HashMap<String, List<Category>> hashMapSupply = new HashMap<>();
-    // Lấy danh sách tất cả các Supply từ repository
-    List<Supply> supplyList = ISupplyRepository.findAll();
-    // Duyệt qua từng Supply
+    List<Supply> supplyList = supplyRepository.findAll();
     for (Supply supply : supplyList) {
-      // Lấy tên dịch vụ từ Supply
       String nameService = supply.getNameService();
-      // Lấy Category từ Supply
       Category category = supply.getCategory();
-      // Nếu tên dịch vụ chưa tồn tại trong HashMap, thêm một mục mới với danh sách trống
       if (!hashMapSupply.containsKey(nameService)) {
         hashMapSupply.put(nameService, new ArrayList<>());
       }
-      // Thêm Category vào danh sách tương ứng với tên dịch vụ
       hashMapSupply.get(nameService).add(category);
     }
     return hashMapSupply;

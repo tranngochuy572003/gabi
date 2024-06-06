@@ -12,13 +12,13 @@ import java.util.logging.Logger;
 
 @Aspect
 @Component
-public class GreetingAspect {
+public class greetingAspect {
   private  Logger logger = Logger.getLogger(getClass().getName());
 
   @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
   public void controllerMethods(){}
 
-  @Around("controllerMethods() && execution(* com.gabispa.restfulservice.controller.UserController.*(..))")
+  @Around("controllerMethods() && execution(* com.gabispa.restfulservice.controller.userController.*(..))")
   public Object logUserActivity (ProceedingJoinPoint joinPoint) throws Throwable{
 
     String methodName = joinPoint.getSignature().getName();
